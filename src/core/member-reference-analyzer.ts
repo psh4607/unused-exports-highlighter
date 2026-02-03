@@ -139,8 +139,9 @@ export class MemberReferenceAnalyzer {
     }
 
     return new Promise((resolve) => {
-      // .memberName 패턴 검색 (인스턴스 접근)
-      const pattern = `\\.${member.name}\\b`;
+      // .memberName 또는 .memberName( 패턴 검색 (인스턴스 접근)
+      // 리터럴 문자열로 검색 (정규식 대신)
+      const pattern = `.${member.name}`;
 
       const args = [
         '--type',
@@ -148,28 +149,40 @@ export class MemberReferenceAnalyzer {
         '--type',
         'js',
         '-l', // 파일명만 출력
-        '-e',
+        '-F', // Fixed string (리터럴 검색)
         pattern,
         '--glob',
         '!node_modules/**',
         '--glob',
+        '!**/node_modules/**',
+        '--glob',
         '!*.d.ts',
-        '.',
+        '--glob',
+        '!dist/**',
+        '--glob',
+        '!build/**',
       ];
 
       const rg = cp.spawn('rg', args, {
         cwd: workspaceRoot,
-        shell: true,
+        shell: false, // shell 없이 직접 실행
       });
 
       let stdout = '';
+      let stderr = '';
 
       rg.stdout.on('data', (data) => {
         stdout += data.toString();
       });
 
+      rg.stderr.on('data', (data) => {
+        stderr += data.toString();
+      });
+
       rg.on('close', (code) => {
+        // code 0: 매치 있음, code 1: 매치 없음, 그 외: 에러
         if (code !== 0 && code !== 1) {
+          console.error(`ripgrep error for ${member.name}:`, stderr);
           resolve([]);
           return;
         }
@@ -185,7 +198,8 @@ export class MemberReferenceAnalyzer {
         resolve(files);
       });
 
-      rg.on('error', () => {
+      rg.on('error', (err) => {
+        console.error(`ripgrep spawn error for ${member.name}:`, err.message);
         resolve([]);
       });
     });

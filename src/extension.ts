@@ -265,6 +265,7 @@ async function analyzeDocument(document: vscode.TextDocument): Promise<void> {
 
 /**
  * 클래스 멤버 분석
+ * 현재는 private 멤버만 분석 (public/protected는 외부 참조 분석이 복잡하여 제외)
  */
 async function analyzeClassMembers(
   document: vscode.TextDocument,
@@ -277,8 +278,13 @@ async function analyzeClassMembers(
     const allMembers = classMemberFinder.findClassMembers(document);
 
     // 데코레이터가 있는 멤버 제외
-    const analyzableMembers =
+    const membersWithoutDecorators =
       decoratorChecker.filterAnalyzableMembers(allMembers);
+
+    // private 멤버만 필터링 (public/protected는 외부에서 사용될 수 있으므로 제외)
+    const analyzableMembers = membersWithoutDecorators.filter(
+      (member) => member.accessModifier === 'private'
+    );
 
     // 참조 분석
     const memberResults = await memberReferenceAnalyzer.analyzeBatch(
