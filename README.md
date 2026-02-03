@@ -25,7 +25,7 @@ ext install seongho.unused-exports-highlighter
 
 ```bash
 # 저장소 클론
-git clone https://github.com/seongho/unused-exports-highlighter
+git clone https://github.com/psh4607/unused-exports-highlighter
 
 # 의존성 설치
 cd unused-exports-highlighter
