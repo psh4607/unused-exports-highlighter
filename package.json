@@ -1,0 +1,179 @@
+{
+  "name": "unused-exports-highlighter",
+  "displayName": "Unused Exports Highlighter",
+  "description": "Highlight unused exports with reduced opacity, similar to IntelliJ's unused code detection",
+  "version": "0.0.1",
+  "publisher": "seongho",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Linters",
+    "Other"
+  ],
+  "keywords": [
+    "unused",
+    "exports",
+    "typescript",
+    "javascript",
+    "highlight",
+    "dead code"
+  ],
+  "activationEvents": [
+    "onLanguage:typescript",
+    "onLanguage:typescriptreact",
+    "onLanguage:javascript",
+    "onLanguage:javascriptreact"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Unused Exports Highlighter",
+      "properties": {
+        "unusedExports.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable unused exports highlighting"
+        },
+        "unusedExports.opacity": {
+          "type": "number",
+          "default": 0.5,
+          "minimum": 0.1,
+          "maximum": 1,
+          "description": "Opacity for unused exports (0.1 - 1.0)"
+        },
+        "unusedExports.excludePatterns": {
+          "type": "array",
+          "default": [
+            "**/node_modules/**",
+            "**/*.d.ts",
+            "**/index.ts",
+            "**/index.tsx"
+          ],
+          "description": "Glob patterns to exclude from analysis"
+        },
+        "unusedExports.includeDefaultExports": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include default exports in analysis"
+        },
+        "unusedExports.debounceMs": {
+          "type": "number",
+          "default": 1000,
+          "description": "Debounce time for re-analysis after file save (ms)"
+        },
+        "unusedExports.analysisStrategy": {
+          "type": "string",
+          "enum": [
+            "fast",
+            "accurate",
+            "hybrid"
+          ],
+          "default": "hybrid",
+          "enumDescriptions": [
+            "Fast analysis using ripgrep (may miss some cases)",
+            "Accurate analysis using TypeScript compiler (slower)",
+            "Hybrid: fast search + accurate verification"
+          ],
+          "description": "Analysis strategy"
+        },
+        "unusedExports.analyzeClassMembers": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable unused class members highlighting"
+        },
+        "unusedExports.excludeDecorators": {
+          "type": "array",
+          "default": [
+            "Column",
+            "PrimaryColumn",
+            "PrimaryGeneratedColumn",
+            "CreateDateColumn",
+            "UpdateDateColumn",
+            "OneToMany",
+            "ManyToOne",
+            "OneToOne",
+            "ManyToMany",
+            "JoinColumn",
+            "JoinTable",
+            "IsString",
+            "IsNumber",
+            "IsInt",
+            "IsBoolean",
+            "IsArray",
+            "IsEnum",
+            "IsOptional",
+            "IsNotEmpty",
+            "ValidateNested",
+            "Type",
+            "Transform",
+            "Expose",
+            "Exclude",
+            "ApiProperty",
+            "ApiPropertyOptional",
+            "Inject",
+            "Injectable"
+          ],
+          "description": "Decorators to exclude from unused member analysis (ORM, validation, etc.)"
+        },
+        "unusedExports.excludeMemberPatterns": {
+          "type": "array",
+          "default": [
+            "*.entity.ts",
+            "*.dto.ts",
+            "*.model.ts"
+          ],
+          "description": "File patterns to exclude from class member analysis"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "unusedExports.analyzeWorkspace",
+        "title": "Unused Exports: Analyze Workspace"
+      },
+      {
+        "command": "unusedExports.analyzeCurrentFile",
+        "title": "Unused Exports: Analyze Current File"
+      },
+      {
+        "command": "unusedExports.clearCache",
+        "title": "Unused Exports: Clear Cache"
+      },
+      {
+        "command": "unusedExports.toggle",
+        "title": "Unused Exports: Toggle Highlighting"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "pnpm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "pnpm run compile && pnpm run lint",
+    "lint": "eslint src --ext ts",
+    "lint:fix": "eslint src --ext ts --fix",
+    "test": "node ./dist/test/runTest.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "@vscode/test-electron": "^2.3.8",
+    "@vscode/vsce": "^2.22.0",
+    "eslint": "^8.55.0",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "minimatch": "^10.1.1",
+    "ts-morph": "^21.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seongho/unused-exports-highlighter"
+  },
+  "license": "MIT"
+}
