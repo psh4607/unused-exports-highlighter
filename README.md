@@ -1,85 +1,87 @@
 # Unused Exports Highlighter
 
-프로젝트 전체에서 사용되지 않는 `export`와 **클래스 멤버**를 감지하여 **연하게 (흐리게)** 표시하는 VS Code/Cursor Extension입니다.
+**English** | [한국어](./README.ko.md)
 
-IntelliJ의 미사용 코드 표시 방식과 유사하게, export된 심볼이나 클래스 멤버가 프로젝트 어디에서도 사용되지 않으면 시각적으로 구분됩니다.
+A VS Code/Cursor Extension that detects unused `exports` and **class members** throughout your project and displays them **dimmed (reduced opacity)**.
 
-## 기능
+Similar to IntelliJ's unused code detection, exported symbols or class members that are not used anywhere in the project are visually distinguished.
 
-- **미사용 export 감지**: 프로젝트 전체에서 import되지 않는 export 식별
-- **미사용 클래스 멤버 감지**: 클래스 내 사용되지 않는 속성/메서드 식별
-- **시각적 표시**: 미사용 코드를 연하게 (opacity 50%) 표시
-- **실시간 업데이트**: 파일 저장 시 자동으로 재분석
-- **스마트 제외**: Entity/DTO 파일, ORM 데코레이터 자동 제외
-- **유연한 설정**: 제외 패턴, 투명도, 분석 전략 등 커스터마이징 가능
+## Features
 
-## 설치
+- **Detect Unused Exports**: Identifies exports that are not imported anywhere in the project.
+- **Detect Unused Class Members**: Identifies properties/methods within classes that are not used.
+- **Visual Indication**: Displays unused code with reduced opacity (default 50%).
+- **Real-time Updates**: Automatically re-analyzes upon file save.
+- **Smart Exclusion**: Automatically excludes Entity/DTO files and ORM decorators.
+- **Flexible Configuration**: Customizable exclusion patterns, opacity levels, analysis strategies, etc.
 
-### VS Code Marketplace (예정)
+## Installation
+
+### VS Code Marketplace (Coming Soon)
 
 ```
 ext install seongho.unused-exports-highlighter
 ```
 
-### 수동 설치
+### Manual Installation
 
 ```bash
-# 저장소 클론
+# Clone repository
 git clone https://github.com/psh4607/unused-exports-highlighter
 
-# 의존성 설치
+# Install dependencies
 cd unused-exports-highlighter
 pnpm install
 
-# 빌드
+# Build
 pnpm run compile
 
-# F5를 눌러 Extension Development Host 실행
+# Press F5 to launch Extension Development Host
 ```
 
-## 사용법
+## Usage
 
-Extension이 활성화되면 자동으로 TypeScript/JavaScript 파일을 분석합니다.
+Once the extension is activated, it automatically analyzes TypeScript/JavaScript files.
 
-### 명령어
+### Commands
 
-| 명령어                                 | 설명                   |
-| -------------------------------------- | ---------------------- |
-| `Unused Exports: Analyze Workspace`    | 워크스페이스 전체 분석 |
-| `Unused Exports: Analyze Current File` | 현재 파일 분석         |
-| `Unused Exports: Clear Cache`          | 분석 캐시 클리어       |
-| `Unused Exports: Toggle Highlighting`  | 하이라이팅 켜기/끄기   |
+| Command                                | Description                  |
+| -------------------------------------- | ---------------------------- |
+| `Unused Exports: Analyze Workspace`    | Analyze the entire workspace |
+| `Unused Exports: Analyze Current File` | Analyze the current file     |
+| `Unused Exports: Clear Cache`          | Clear analysis cache         |
+| `Unused Exports: Toggle Highlighting`  | Toggle highlighting on/off   |
 
-### 상태바
+### Status Bar
 
-우측 하단 상태바에서 현재 상태를 확인할 수 있습니다:
+You can check the current status in the bottom right status bar:
 
-- `$(eye) Unused: 5 (3E/2M)` - 활성화됨, 3개 export + 2개 멤버 미사용
-- `$(eye-closed) Unused Exports` - 비활성화됨
-- `$(sync~spin) Analyzing...` - 분석 중
+- `$(eye) Unused: 5 (3E/2M)` - Active, 3 unused exports + 2 unused members detected
+- `$(eye-closed) Unused Exports` - Inactive
+- `$(sync~spin) Analyzing...` - Analyzing
 
-## 설정
+## Configuration
 
-### 기본 설정
+### General Settings
 
-| 설정                                  | 기본값                                                               | 설명                                     |
-| ------------------------------------- | -------------------------------------------------------------------- | ---------------------------------------- |
-| `unusedExports.enabled`               | `true`                                                               | 하이라이팅 활성화 여부                   |
-| `unusedExports.opacity`               | `0.5`                                                                | 미사용 코드 투명도 (0.1 ~ 1.0)           |
-| `unusedExports.excludePatterns`       | `["**/node_modules/**", "**/*.d.ts", "**/index.ts", "**/index.tsx"]` | 분석 제외 패턴                           |
-| `unusedExports.includeDefaultExports` | `false`                                                              | default export 포함 여부                 |
-| `unusedExports.debounceMs`            | `1000`                                                               | 분석 debounce 시간 (ms)                  |
-| `unusedExports.analysisStrategy`      | `"hybrid"`                                                           | 분석 전략 (`fast`, `accurate`, `hybrid`) |
+| Setting                               | Default                                                              | Description                                      |
+| ------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------ |
+| `unusedExports.enabled`               | `true`                                                               | Enable/disable highlighting                      |
+| `unusedExports.opacity`               | `0.5`                                                                | Opacity for unused code (0.1 - 1.0)              |
+| `unusedExports.excludePatterns`       | `["**/node_modules/**", "**/*.d.ts", "**/index.ts", "**/index.tsx"]` | Glob patterns to exclude from analysis           |
+| `unusedExports.includeDefaultExports` | `false`                                                              | Whether to include default exports in analysis   |
+| `unusedExports.debounceMs`            | `1000`                                                               | Debounce time for re-analysis (ms)               |
+| `unusedExports.analysisStrategy`      | `"hybrid"`                                                           | Analysis strategy (`fast`, `accurate`, `hybrid`) |
 
-### 클래스 멤버 분석 설정
+### Class Member Analysis Settings
 
-| 설정                                  | 기본값                                       | 설명                                  |
-| ------------------------------------- | -------------------------------------------- | ------------------------------------- |
-| `unusedExports.analyzeClassMembers`   | `true`                                       | 클래스 멤버 분석 활성화 여부          |
-| `unusedExports.excludeDecorators`     | `["Column", "IsString", "ApiProperty", ...]` | 분석에서 제외할 데코레이터            |
-| `unusedExports.excludeMemberPatterns` | `["*.entity.ts", "*.dto.ts", "*.model.ts"]`  | 클래스 멤버 분석에서 제외할 파일 패턴 |
+| Setting                               | Default                                      | Description                                         |
+| ------------------------------------- | -------------------------------------------- | --------------------------------------------------- |
+| `unusedExports.analyzeClassMembers`   | `true`                                       | Enable/disable class member analysis                |
+| `unusedExports.excludeDecorators`     | `["Column", "IsString", "ApiProperty", ...]` | Decorators to exclude from analysis                 |
+| `unusedExports.excludeMemberPatterns` | `["*.entity.ts", "*.dto.ts", "*.model.ts"]`  | File patterns to exclude from class member analysis |
 
-### 설정 예시
+### Configuration Example
 
 ```json
 {
@@ -108,35 +110,35 @@ Extension이 활성화되면 자동으로 TypeScript/JavaScript 파일을 분석
 }
 ```
 
-## 분석 전략
+## Analysis Strategy
 
-### Export 분석
+### Export Analysis
 
-| 전략       | 설명                          | 장점      | 단점                    |
-| ---------- | ----------------------------- | --------- | ----------------------- |
-| `fast`     | ripgrep 기반 텍스트 검색      | 매우 빠름 | 동적 import 감지 어려움 |
-| `accurate` | TypeScript 컴파일러 기반      | 정확함    | 느림                    |
-| `hybrid`   | fast + 의심 케이스만 accurate | 균형      | -                       |
+| Strategy   | Description                                  | Pros      | Cons                                |
+| ---------- | -------------------------------------------- | --------- | ----------------------------------- |
+| `fast`     | Text search based on ripgrep                 | Very fast | Difficult to detect dynamic imports |
+| `accurate` | TypeScript compiler based                    | Accurate  | Slow                                |
+| `hybrid`   | fast + verify suspicious cases with accurate | Balanced  | -                                   |
 
-### 클래스 멤버 분석
+### Class Member Analysis
 
-| 접근 제어자 | 분석 범위            | 감지 방식                         |
-| ----------- | -------------------- | --------------------------------- |
-| `private`   | 클래스 내부만        | 클래스 내 `this.member` 참조 검색 |
-| `protected` | 클래스 + 상속 클래스 | 상속 체인 분석 (Phase 2 예정)     |
-| `public`    | 프로젝트 전체        | 외부 파일에서 `.member` 참조 검색 |
+| Access Modifier | Analysis Scope     | Detection Method                                     |
+| --------------- | ------------------ | ---------------------------------------------------- |
+| `private`       | Inside class only  | Search for `this.member` references within the class |
+| `protected`     | Class + Subclasses | Inheritance chain analysis (Planned for Phase 2)     |
+| `public`        | Entire project     | Search for `.member` references in external files    |
 
-## 지원 파일 형식
+## Supported File Types
 
 - TypeScript (`.ts`, `.tsx`, `.mts`)
 - JavaScript (`.js`, `.jsx`, `.mjs`)
 
-## 감지 대상
+## Detection Targets
 
-### Export
+### Exports
 
 ```typescript
-// Named exports (감지됨)
+// Named exports (Detected)
 export class MyClass {}
 export function myFunction() {}
 export const myConst = 'value';
@@ -144,39 +146,39 @@ export type MyType = string;
 export interface MyInterface {}
 export enum MyEnum {}
 
-// Default exports (설정에 따라)
-export default class {} // includeDefaultExports: true 시 감지
+// Default exports (Depending on settings)
+export default class {} // Detected if includeDefaultExports: true
 ```
 
-### 클래스 멤버
+### Class Members
 
 ```typescript
 class MyService {
-  private unusedProp: string; // 미사용 시 연하게 표시
+  private unusedProp: string; // Dimmed if unused
 
-  private unusedMethod() {} // 미사용 시 연하게 표시
+  private unusedMethod() {} // Dimmed if unused
 
   private usedMethod() {
-    // this.usedMethod() 호출 시 정상 표시
-    return this.unusedProp; // unusedProp은 사용됨으로 처리
+    // Normal display if this.usedMethod() is called
+    return this.unusedProp; // unusedProp is treated as used
   }
 }
 ```
 
-## 자동 제외 대상
+## Auto-Exclusion Targets
 
-### 파일 패턴 제외
+### File Pattern Exclusion
 
 - `*.entity.ts` - TypeORM Entity
 - `*.dto.ts` - Data Transfer Object
-- `*.model.ts` - Model 클래스
+- `*.model.ts` - Model Class
 
-### 데코레이터 제외
+### Decorator Exclusion
 
-ORM, Validation, Swagger 등 런타임에 프레임워크가 사용하는 데코레이터:
+Decorators used by frameworks at runtime (ORM, Validation, Swagger, etc.):
 
 ```typescript
-// 이런 속성은 자동으로 분석에서 제외됨
+// These properties are automatically excluded from analysis
 @Column()
 name: string;
 
@@ -187,43 +189,43 @@ email: string;
 description: string;
 ```
 
-## 제한사항
+## Limitations
 
-- 동적 import (`import()`)는 감지가 어려울 수 있습니다
-- Re-export (`export * from`)는 실제 사용으로 카운트됩니다
-- protected 멤버의 상속 분석은 Phase 2에서 지원 예정입니다
-- 대규모 프로젝트에서는 초기 분석에 시간이 걸릴 수 있습니다
+- Dynamic imports (`import()`) may be difficult to detect.
+- Re-exports (`export * from`) are counted as actual usage.
+- Inheritance analysis for protected members is planned for Phase 2.
+- Initial analysis may take some time for large projects.
 
-## 개발
+## Development
 
 ```bash
-# 의존성 설치
+# Install dependencies
 pnpm install
 
-# 빌드
+# Build
 pnpm run compile
 
-# 감시 모드
+# Watch mode
 pnpm run watch
 
-# 린트
+# Lint
 pnpm run lint
 
-# 패키징
+# Package
 pnpm run package
 ```
 
-## 기술 스택
+## Tech Stack
 
 - TypeScript
 - VS Code Extension API
-- ts-morph (AST 파싱)
-- ripgrep (빠른 텍스트 검색)
+- ts-morph (AST parsing)
+- ripgrep (Fast text search)
 
-## 라이선스
+## License
 
 MIT License
 
-## 기여
+## Contribution
 
-이슈와 PR을 환영합니다!
+Issues and PRs are welcome!
