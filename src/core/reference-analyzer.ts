@@ -1,5 +1,5 @@
-import * as cp from 'child_process';
-import * as path from 'path';
+import * as cp from 'node:child_process';
+import * as path from 'node:path';
 import * as vscode from 'vscode';
 import { ExportInfo, ReferenceResult } from '../types';
 import {
@@ -29,7 +29,9 @@ export class ReferenceAnalyzer {
    * 단일 export의 참조 분석
    */
   async analyzeReference(exportInfo: ExportInfo): Promise<ReferenceResult> {
-    const workspaceRoot = getWorkspaceRoot();
+    // exportInfo.filePath를 URI로 변환하여 올바른 워크스페이스 찾기
+    const documentUri = vscode.Uri.file(exportInfo.filePath);
+    const workspaceRoot = getWorkspaceRoot(documentUri);
 
     if (!workspaceRoot) {
       return {

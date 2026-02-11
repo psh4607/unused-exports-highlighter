@@ -6,7 +6,7 @@ import { AccessModifier, ClassMemberInfo } from '../types';
  * ts-morph를 사용하여 클래스 멤버를 파싱하는 클래스
  */
 export class ClassMemberFinder {
-  private project: Project;
+  private readonly project: Project;
 
   constructor() {
     this.project = new Project({

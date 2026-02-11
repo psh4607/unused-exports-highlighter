@@ -1,6 +1,7 @@
 # Build output
 dist/
 out/
+playground/
 
 # Dependencies
 node_modules/

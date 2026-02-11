@@ -2,7 +2,7 @@
   "name": "unused-exports-highlighter",
   "displayName": "Unused Exports Highlighter",
   "description": "Highlight unused exports with reduced opacity, similar to IntelliJ's unused code detection",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "publisher": "psh4607",
   "engines": {
     "vscode": "^1.85.0"

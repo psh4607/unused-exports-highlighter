@@ -1,5 +1,5 @@
-import * as cp from 'child_process';
-import * as path from 'path';
+import * as cp from 'node:child_process';
+import * as path from 'node:path';
 import * as vscode from 'vscode';
 import { ClassMemberInfo, MemberReferenceResult } from '../types';
 import { getWorkspaceRoot } from '../utils/file-utils';
@@ -132,7 +132,9 @@ export class MemberReferenceAnalyzer {
   private async findPublicMemberReferences(
     member: ClassMemberInfo
   ): Promise<string[]> {
-    const workspaceRoot = getWorkspaceRoot();
+    // member.filePath를 URI로 변환하여 올바른 워크스페이스 찾기
+    const documentUri = vscode.Uri.file(member.filePath);
+    const workspaceRoot = getWorkspaceRoot(documentUri);
 
     if (!workspaceRoot) {
       return [];

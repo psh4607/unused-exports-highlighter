@@ -31,14 +31,24 @@ export function isExcluded(
 
 /**
  * 워크스페이스 루트 경로 반환
+ * @param documentUri - 문서 URI (제공되면 해당 문서가 속한 워크스페이스 반환)
  */
-export function getWorkspaceRoot(): string | undefined {
+export function getWorkspaceRoot(documentUri?: vscode.Uri): string | undefined {
   const workspaceFolders = vscode.workspace.workspaceFolders;
 
   if (!workspaceFolders || workspaceFolders.length === 0) {
     return undefined;
   }
 
+  // documentUri가 제공되면 해당 문서가 속한 워크스페이스 찾기
+  if (documentUri) {
+    const workspaceFolder = vscode.workspace.getWorkspaceFolder(documentUri);
+    if (workspaceFolder) {
+      return workspaceFolder.uri.fsPath;
+    }
+  }
+
+  // fallback: 첫 번째 워크스페이스 반환
   return workspaceFolders[0].uri.fsPath;
 }
 
